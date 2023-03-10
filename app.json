@@ -14,10 +14,4 @@
             "description": "Get this value from https://my.telegram.org"
         }
     },
-    "formation": {
-            "worker": {
-                "quantity": 1,
-                "size": "eco"
-            }
-        }
   }
