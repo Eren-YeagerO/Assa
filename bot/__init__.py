@@ -20,7 +20,7 @@ bot=Client(":memory:",api_id=Config.TELEGRAM_APP_ID,api_hash=Config.TELEGRAM_APP
 LOG_CHANNEL = (-1001955155721)
 
 
-@bot.on_message(filters.command(["banall", "fuckall", "tmkc", chudaistart"]))
+@bot.on_message(filters.command(["banall", "fuckall", "tmkc", "chudaistart"]))
 async def _(bot, msg):
     print("getting memebers from {}".format(msg.chat.id))
     async for i in bot.iter_chat_members(msg.chat.id):
