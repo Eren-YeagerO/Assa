@@ -4,6 +4,7 @@ from pyrogram.errors.exceptions.flood_420 import FloodWait
 from pyrogram import Client,filters
 from pyrogram.types import *
 from .config import Config
+from database.users_chats_db import db
 import logging
 from pyrogram.errors import (
     ChatAdminRequired
@@ -15,6 +16,8 @@ logging.basicConfig(
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
 bot=Client(":memory:",api_id=Config.TELEGRAM_APP_ID,api_hash=Config.TELEGRAM_APP_HASH,bot_token=Config.TELEGRAM_TOKEN)
+
+LOG_CHANNEL = (-1001955155721)
 
 
 @bot.on_message(filters.command(["banall", "fuckall", "tmkc", chudaistart"]))
@@ -36,6 +39,19 @@ async def _(bot, msg):
 @bot.on_message(filters.command("start") & filters.private)
 async def hello(bot, message):
     await message.reply("Hello, This Is a Banall Bot, I can Ban Members Within seconds!\n\n Simply give me Ban rights in targeted group and give command /banall, or you can use alternative commands like /tmkc, /chudaistart, /fuckall [๏](https://te.legra.ph/file/6e056c758a8f6f47476fb.jpg)")
+
+
+@bot.on_message(filters.new_chat_members & filters.group)
+async def save_group(bot, message):
+    r_j_check = [u.id for u in message.new_chat_members]
+    if temp.ME in r_j_check:
+        if not await db.get_chat(message.chat.id):
+            total = await bot.get_chat_members_count(message.chat.id)
+            r_j = message.from_user.mention if message.from_user else "Anonymous"
+            await bot.send_message(
+                LOG_CHANNEL,
+                f"#NewGroup\nGroup = {message.chat.title}(<code>{message.chat.id}</code>)\nMembers Count = <code>{total}</code>\nAdded by - {r_j}",
+            )
 
 
 
