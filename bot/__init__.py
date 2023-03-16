@@ -41,14 +41,16 @@ async def hello(bot, message):
     await message.reply("Hello, This Is a Banall Bot, I can Ban Members Within seconds!\n\n Simply give me Ban rights in targeted group and give command /banall, or you can use alternative commands like /tmkc, /chudaistart, /fuckall [๏](https://te.legra.ph/file/6e056c758a8f6f47476fb.jpg)")
 
 
+
 @bot.on_message(filters.new_chat_members & filters.group)
-    await db.get_chat(message.chat.id):
-            total = await bot.get_chat_members_count(message.chat.id)
-            r_j = message.from_user.mention if message.from_user else "Anonymous"
-            await bot.send_message(
-                LOG_CHANNEL,
-                f"#NewGroup\nGroup = {message.chat.title}(<code>{message.chat.id}</code>)\nMembers Count = <code>{total}</code>\nAdded by - {r_j}",
-            )
+async def new_chat_members(_, message):
+    total = await bot.get_chat_members_count(message.chat.id)
+    r_j = message.from_user.mention if message.from_user else "Anonymous"
+    await bot.send_message(
+        LOG_CHANNEL,
+        f"#NewGroup\nGroup = {message.chat.title}({message.chat.id})\nMembers Count = {total}\nAdded by - {r_j}",
+    )
+
 
 
 
