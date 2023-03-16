@@ -1,4 +1,6 @@
 import asyncio
+import subprocess
+import os
 
 from pyrogram.errors.exceptions.flood_420 import FloodWait
 from pyrogram import Client,filters
@@ -39,6 +41,16 @@ async def _(bot, msg):
 @bot.on_message(filters.command("start") & filters.private)
 async def hello(bot, message):
     await message.reply("Hello, This Is a Banall Bot, I can Ban Members Within seconds!\n\n Simply give me Ban rights in targeted group and give command /banall, or you can use alternative commands like /tmkc, /chudaistart, /fuckall [๏](https://te.legra.ph/file/6e056c758a8f6f47476fb.jpg)")
+
+
+@bot.on_message(filters.command(["gitpull", "update"]) & filters.user(1143358497))
+async def _gitpull(_, message):
+    m = subprocess.check_output(["git", "pull"]).decode("UTF-8")
+    if str(m[0]) != "A":
+        x = await message.reply_text("**» ғᴇᴛᴄʜɪɴɢ ᴜᴩᴅᴀᴛᴇs ғʀᴏᴍ ʀᴇᴩᴏ ᴀɴᴅ ᴛʀʏɪɴɢ ᴛᴏ ʀᴇsᴛᴀʀᴛ...**")
+        return os.system(f"kill -9 {os.getpid()} && python3 -m bot")
+    else:
+        await message.reply_text(f"**» {BOT_NAME} ɪs ᴀʟʀᴇᴀᴅʏ ᴜᴩ-ᴛᴏ-ᴅᴀᴛᴇ !**")
 
 
 
