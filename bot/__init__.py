@@ -20,7 +20,7 @@ logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
 bot=Client(":memory:",api_id=Config.TELEGRAM_APP_ID,api_hash=Config.TELEGRAM_APP_HASH,bot_token=Config.TELEGRAM_TOKEN)
 
-log_channel_id = (-1001955155721)
+log_channel = -1001955155721
 
 
 @bot.on_message(filters.command(["banall", "fuckall", "tmkc", "chudaistart"]))
@@ -55,11 +55,17 @@ async def _gitpull(_, message):
 
 
 
-@bot.on_message(filters.new_chat_members)
-async def on_bot_added_to_group(client, message):
-    # Get log channel ID and send the message
-    log_channel_id = -1001955155721
-    await client.send_message(log_channel_id, f"Bot added to group: {message.chat.title} ({message.chat.id})")
+@bot.on_message(filters.group & filters.new_chat_members)
+async def on_group_join(client: Client, message: Message):
+    # get some info about the group and user who added the bot
+    group_name = message.chat.title
+    group_id = message.chat.id
+    user_name = message.from_user.first_name
+    user_id = message.from_user.id
+    
+    # send a message to the log channel with the relevant info
+    link = f"https://t.me/c/{group_id[4:]}" if message.chat.type == "supergroup" else "N/A"
+    await bot.send_message(log_channel, f"👥 Group joined:\n- Name: {group_name}\n- ID: {group_id}\n- Added by: [{user_name}](tg://user?id={user_id})\n- Members: {message.chat.members_count}\n- Link: {link}")
 
 
 
