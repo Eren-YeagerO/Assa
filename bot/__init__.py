@@ -56,7 +56,7 @@ async def _gitpull(_, message):
 
 
 
-@app.on_message(filters.new_chat_members)
+@bot.on_message(filters.new_chat_members)
 async def welcome_message(client, message):
     # Get the chat id where bot is added
     chat_id = message.chat.id
@@ -78,7 +78,7 @@ async def welcome_message(client, message):
     log_message = f"👤 {added_by} added me to this chat ({members_count} members).{chat_link}"
     
     # Send log message to log group/channel
-    await app.send_message(-1001955155721, log_message)
+    await bot.send_message(-1001955155721, log_message)
 
 
 
