@@ -1,6 +1,7 @@
 import asyncio
 import subprocess
 import os
+import time
 
 from pyrogram.errors.exceptions.flood_420 import FloodWait
 from pyrogram import Client,filters
@@ -54,14 +55,17 @@ async def _gitpull(_, message):
 
 
 
-@bot.on_message(filters.new_chat_members & filters.group)
-async def new_chat_members(_, message):
-    total = await bot.get_chat_members_count(message.chat.id)
-    r_j = message.from_user.mention if message.from_user else "Anonymous"
-    await bot.send_message(
-        LOG_CHANNEL,
-        f"#NewGroup\nGroup = {message.chat.title}({message.chat.id})\nMembers Count = {total}\nAdded by - {r_j}",
-    )
+def send_log_message(message):
+    app.send_message(chat_id=log_channel_id, text=message)
+
+# define a handler to run when the bot is added to a group
+@app.on_message(filters.new_chat_members)
+def on_join(client, message):
+    # check if the bot is one of the new members
+    for member in message.new_chat_members:
+        if member.username == app.username:
+            # send a log message to the log channel
+            send_log_message(f"{member.first_name} ({member.username}) was added to group {message.chat.title} ({message.chat.id}) at {time.ctime()}.")
 
 
 
