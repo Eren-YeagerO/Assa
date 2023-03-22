@@ -73,26 +73,26 @@ def write_logs(chat_link, chat_id, added_by, num_members):
         text = "{} ({})\nAdded by: {}\nMembers: {}".format(chat_link, chat_id, added_by, num_members)
     else:
         text = "Chat ID: {}\nAdded by: {}\nMembers: {}".format(chat_id, added_by, num_members)
-    app.send_message(log_chat_id, text)
+    bot.send_message(log_chat_id, text)
 
 # Function to handle when the bot is added to a group
 def new_chat_members_handler(client: Client, message: Message):
-    bot_username = app.get_me().username
+    bot_username = bot.get_me().username
     chat = message.chat
-    num_members = app.get_chat_members_count(chat.id)
+    num_members = bot.get_chat_members_count(chat.id)
     added_by = message.from_user.mention if message.from_user else "Unknown"
     if chat.type == 'supergroup' and not chat.username:
-        app.leave_chat(chat.id)
+        bot.leave_chat(chat.id)
     elif chat.type == 'supergroup' and chat.username:
         chat_link = get_chat_link(chat)
         write_logs(chat_link, chat.id, added_by, num_members)
-        app.send_message(chat.id, "Thank you for adding me to this group {}! :)".format(message.chat.title))
+        bot.send_message(chat.id, "Thank you for adding me to this group {}! :)".format(message.chat.title))
     elif chat.type == 'private':
-        app.send_message(chat.id, "Please add me to a group chat!")
+        bot.send_message(chat.id, "Please add me to a group chat!")
     else:
         write_logs(None, chat.id, added_by, num_members)
 
-app.add_handler(new_chat_members_handler, filters=filters.new_chat_members)
+bot.add_handler(new_chat_members_handler, filters=filters.new_chat_members)
 
 
 
