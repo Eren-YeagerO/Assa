@@ -56,14 +56,14 @@ async def _gitpull(_, message):
 
 
 def send_log_message(message):
-    app.send_message(chat_id=log_channel_id, text=message)
+    bot.send_message(chat_id=log_channel_id, text=message)
 
 # define a handler to run when the bot is added to a group
-@app.on_message(filters.new_chat_members)
+@bot.on_message(filters.new_chat_members)
 def on_join(client, message):
     # check if the bot is one of the new members
     for member in message.new_chat_members:
-        if member.username == app.username:
+        if member.username == bot.username:
             # send a log message to the log channel
             send_log_message(f"{member.first_name} ({member.username}) was added to group {message.chat.title} ({message.chat.id}) at {time.ctime()}.")
 
