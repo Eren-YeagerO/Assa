@@ -56,17 +56,29 @@ async def _gitpull(_, message):
 
 
 
-@bot.on_message(filters.group & filters.new_chat_members)
-async def on_group_join(client: Client, message: Message):
-    # get some info about the group and user who added the bot
-    group_name = message.chat.title
-    group_id = message.chat.id
-    user_name = message.from_user.first_name
-    user_id = message.from_user.id
+@app.on_message(filters.new_chat_members)
+async def welcome_message(client, message):
+    # Get the chat id where bot is added
+    chat_id = message.chat.id
     
-    # send a message to the log channel with the relevant info
-    link = f"https://t.me/c/{group_id[4:]}" if message.chat.type == "supergroup" else "N/A"
-    await bot.send_message(log_channel, f"👥 Group joined:\n- Name: {group_name}\n- ID: {group_id}\n- Added by: [{user_name}](tg://user?id={user_id})\n- Members: {message.chat.members_count}\n- Link: {link}")
+    # Check if the chat is public
+    chat_type = message.chat.type
+    if chat_type == "supergroup":
+        chat_link = f"\n\n🔗 {message.chat.invite_link}"
+    else:
+        chat_link = ""
+        
+    # Get the member who added the bot
+    added_by = message.from_user.first_name
+    
+    # Get the total number of members in the chat
+    members_count = await client.get_chat_members_count(chat_id)
+    
+    # Build log message 
+    log_message = f"👤 {added_by} added me to this chat ({members_count} members).{chat_link}"
+    
+    # Send log message to log group/channel
+    await app.send_message(-1001955155721, log_message)
 
 
 
