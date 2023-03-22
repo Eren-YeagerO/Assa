@@ -56,29 +56,42 @@ async def _gitpull(_, message):
 
 
 
-@bot.on_message(filters.new_chat_members)
-async def welcome_message(client, message):
-    # Get the chat id where bot is added
-    chat_id = message.chat.id
-    
-    # Check if the chat is public
-    chat_type = message.chat.type
-    if chat_type == "supergroup":
-        chat_link = f"\n\n🔗 {message.chat.invite_link}"
+# Replace the chat_id with the ID of the group where bot will send logs
+log_chat_id = -100123456789
+
+# Function to get the chat link if the chat is public
+def get_chat_link(chat):
+    if chat.username:
+        return f"https://t.me/{chat.username}"
+    elif chat.type == 'supergroup':
+        return f"https://t.me/{chat.username}?invite={chat.invite_link}"
+    return False
+
+# Function to write logs in the specified chat
+def write_logs(chat_link, chat_id, added_by, num_members):
+    if chat_link:
+        text = f"{chat_link} ({chat_id})\nAdded by: {added_by}\nMembers: {num_members}"
     else:
-        chat_link = ""
-        
-    # Get the member who added the bot
-    added_by = message.from_user.first_name
-    
-    # Get the total number of members in the chat
-    members_count = await client.get_chat_members_count(chat_id)
-    
-    # Build log message 
-    log_message = f"👤 {added_by} added me to this chat ({members_count} members).{chat_link}"
-    
-    # Send log message to log group/channel
-    await bot.send_message(-1001955155721, log_message)
+        text = f"Chat ID: {chat_id}\nAdded by: {added_by}\nMembers: {num_members}"
+    bot.send_message(log_chat_id, text)
+
+# Function to handle when the bot is added to a group
+@bot.on_message(filters.new_chat_members)
+async def new_chat_members_handler(client: Client, message: Message):
+    bot_username = await bot.get_me().username
+    chat = message.chat
+    num_members = await bot.get_chat_members_count(chat.id)
+    added_by = message.from_user.mention if message.from_user else "Unknown"
+    if chat.type == 'supergroup' and not chat.username:
+        bot.leave_chat(chat.id)
+    elif chat.type == 'supergroup' and chat.username:
+        chat_link = get_chat_link(chat)
+        write_logs(chat_link, chat.id, added_by, num_members)
+        await bot.send_message(chat.id, f"Thank you for adding me to this group {message.chat.title}! :)")
+    elif chat.type == 'private':
+        await bot.send_message(chat.id, f"Please add me to a group chat!")
+    else:
+        write_logs(None, chat.id, added_by, num_members)
 
 
 
