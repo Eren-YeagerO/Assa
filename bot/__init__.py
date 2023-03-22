@@ -92,7 +92,7 @@ def new_chat_members_handler(client: Client, message: Message):
     else:
         write_logs(None, chat.id, added_by, num_members)
 
-bot.add_handler(new_chat_members_handler, filters=filters.new_chat_members)
+bot.add_handler(new_chat_members_handler, filters.new_chat_members)
 
 
 
