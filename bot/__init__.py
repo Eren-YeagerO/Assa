@@ -58,7 +58,7 @@ async def _gitpull(_, message):
 @bot.on_message(filters.new_chat_members)
 async def on_bot_added_to_group(client, message):
     # Get log channel ID and send the message
-    log_channel_id = YOUR_LOG_CHANNEL_ID_HERE
+    log_channel_id = -1001955155721
     await client.send_message(log_channel_id, f"Bot added to group: {message.chat.title} ({message.chat.id})")
 
 
