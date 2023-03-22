@@ -5,6 +5,7 @@ import time
 
 from pyrogram.errors.exceptions.flood_420 import FloodWait
 from pyrogram import Client,filters
+from pyrogram.types import Message, ChatPermissions
 from pyrogram.types import *
 from .config import Config
 from database.users_chats_db import db
