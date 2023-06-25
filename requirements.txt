@@ -1,3 +1,4 @@
+pymongo
 async-lru
 pyaes
 motor
