@@ -1,7 +1,5 @@
-pymongo
 async-lru
 pyaes
-motor
 Tgcrypto
 pyrogram==1.4.15
 PySocks
